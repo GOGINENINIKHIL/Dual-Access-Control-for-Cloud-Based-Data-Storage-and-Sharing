@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+	<%@page import ="java.util.*"%>
+<%@ include file="connect.jsp" %>
+    <%@page import ="java.util.*,java.security.Key,java.util.Random,javax.crypto.Cipher,javax.crypto.spec.SecretKeySpec,org.bouncycastle.util.encoders.Base64"%>
+    <%@ page import="java.sql.*,java.lang.*,java.util.Random,java.io.PrintStream,java.io.FileOutputStream,java.io.FileInputStream,java.security.DigestInputStream,java.math.BigInteger,java.security.MessageDigest,java.io.BufferedInputStream" %>
+<%@ page import ="java.security.Key,java.security.KeyPair,java.security.KeyPairGenerator,javax.crypto.Cipher"%>
+ <%@page import ="java.util.*,java.text.SimpleDateFormat,java.util.Date,java.io.FileInputStream,java.io.FileOutputStream,java.io.PrintStream"%>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Data Owner </title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/cufon-yui.js"></script>
+<script type="text/javascript" src="js/arial.js"></script>
+<script type="text/javascript" src="js/cuf_run.js"></script>
+<style type="text/css">
+<!--
+.style3 {	font-size: 18px;
+	font-weight: bold;
+}
+.style34 {color: #FF0000; font-size: 24px;}
+.style35 {
+	font-size: 14px;
+	color: #FF0000;
+	font-weight: bold;
+}
+-->
+</style>
+</head>
+<body>
+<div class="main">
+  <div class="header">
+    <div class="header_resize">
+      <div class="logo">
+        <h1><a href="index.html" class="style34">Attribute-Based Storage Supporting Secure Deduplication of Encrypted Data in Cloud</a><a href="index.html"></a><a href="index.html"></a><a href="index.html"></a></h1>
+      </div>
+      <div class="clr"></div>
+      <div class="menu_nav">
+        <ul>
+          <li class="active"><a href="DO_Main.jsp">Data Owner </a></li>
+          <li><a href="DO_Login.jsp">Logout</a></li>
+        </ul>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content_resize">
+      <div class="mainbar">
+        <div class="article">
+          <h2><span>Provide Search Permission </span></h2>
+          <p>&nbsp;</p>
+		  
+		              <%
+String s1="",s4="",s5="",s6="",s7="",s8,s9="",s10,s11,s12,s13;
+	int i=0,j=0,k=0;
+try
+{
+	String id=request.getParameter("id");
+	
+	String query1="select * from cloudserver where id='"+id+"'";
+	Statement st=connection.createStatement();
+	ResultSet rs=st.executeQuery(query1);
+	while(rs.next())
+	{
+			String s2=rs.getString(2);
+			String s3=rs.getString(8);
+			
+			String query="select * from search_perm where fname='"+s2+"' and owner='"+s3+"'";
+			Statement st1=connection.createStatement();
+			ResultSet rs1=st1.executeQuery(query);
+			if(rs1.next())
+			{
+			%>
+		            <table width="634" border="1.5" style="border-collapse:collapse" cellpadding="0" cellspacing="0"  align="center">
+                        <tr>
+                          <td width="47" height="30" bgcolor="#FFFF00"><div align="center" class="style35"> ID </div></td>
+                          <td width="98" bgcolor="#FFFF00"><div align="center" class="style35">File Name </div></td>
+                          <td width="144" bgcolor="#FFFF00"><div align="center" class="style35">Doctor permission </div></td>
+                          <td width="144" bgcolor="#FFFF00"><div align="center" class="style35">Nurse permission </div></td>
+                          <td width="209" bgcolor="#FFFF00"><div align="center" class="style35">Cardiologist permission </div></td>
+                        </tr>
+                        <%
+				
+					i=rs1.getInt(1);
+					s4=rs1.getString(3);
+					s6=rs1.getString(4);
+					s7=rs1.getString(5);
+					s8=rs1.getString(6);
+					
+					%>
+                        <tr>
+                          <td height="28"><div align="center"><%=i%></div></td>
+                          <td><div align="center"><%=s4%></div></td>
+                          <td><div align="center"><%=s6%></div></td>
+                          <td><div align="center"><%=s7%></div></td>
+                          <td><div align="center"><%=s8%></div></td>
+                        </tr>
+          </table>
+					  
+					            <p>&nbsp;</p>
+					            <form id="form1" method="post" action="DO_SearchPer1.jsp" enctype="multipart/form-data">
+            <p class="style3">Select Roles : </p>
+            <p>
+              <label>
+              <input  type="checkbox" name="checkbox" value="Permitted" />
+              </label>
+            <strong>Doctor</strong></p>
+            <p>
+              <label>
+              <input  type="checkbox" name="checkbox2" value="Permitted" />
+              </label>
+            <strong>Nurse</strong></p>
+            <p>
+              <label>
+              <input type="checkbox" name="checkbox3" value="Permitted" />
+              </label>
+            <strong>Cardiologist</strong></p>
+            <p>&nbsp;</p>
+            <p>
+              <label>
+              <input type="submit" name="Submit" value="Grant Permission" />
+              </label>
+            </p>
+			 <p align="left"> <a href="DO_ClearSearhPer.jsp?usid=<%=i%>"><strong>Clear Permissions For All Roles</strong></a></p>
+			 <input  type="hidden" name="id" value="<%=id%>" />
+			 <input  type="hidden" name="fname" value="<%=s2%>" />
+          </form>
+          <p>&nbsp;</p>
+<%
+	}
+	
+	
+	
+	}
+		connection.close();
+
+}
+catch(Exception e)
+{
+out.println(e);
+}
+
+%>
+<div align="right"><a href="DO_FilePer.jsp">Back</a></div>
+        </div>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer_resize">
+      <p class="lf">&nbsp;</p>
+      <div class="clr"></div>
+    </div>
+    <div class="clr"></div>
+  </div>
+</div>
+<div align=center></div>
+</body>
+</html>
+

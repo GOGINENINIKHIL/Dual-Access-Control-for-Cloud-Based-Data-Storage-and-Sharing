@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@page import ="java.util.*,java.text.SimpleDateFormat,java.util.Date,java.io.FileInputStream,java.io.FileOutputStream,java.io.PrintStream"%>
+<%@page import ="java.sql.*"%>
+<%@page import ="java.io.*"%>
+<%@page import ="java.util.*,java.security.Key,java.util.Random,javax.crypto.Cipher,javax.crypto.spec.SecretKeySpec,org.bouncycastle.util.encoders.Base64"%>
+<%@ page import="java.sql.*,java.util.Random"%>
+<%@ page import ="java.security.Key,java.security.KeyPair,java.security.KeyPairGenerator,javax.crypto.Cipher"%>
+<%@ include file="connect.jsp" %>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Data User </title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/cufon-yui.js"></script>
+<script type="text/javascript" src="js/arial.js"></script>
+<script type="text/javascript" src="js/cuf_run.js"></script>
+<style type="text/css">
+<!--
+.style18 {font-size: 14px}
+.style5 {
+	font-size: 20px;
+	color: #FF0000;
+}
+.style5 {font-size: 14px; font-weight: bold; }
+.style7 {	font-size: 18px;
+	font-weight: bold;
+}
+.style1 {	color: #666666;
+	font-weight: bold;
+}
+.style34 {color: #FF0000; font-size: 24px;}
+.style36 {font-size: 20px; font-weight: bold; color: #FF0000; }
+-->
+</style>
+</head>
+<body>
+<div class="main">
+  <div class="header">
+    <div class="header_resize">
+      <div class="logo">
+        <h1><a href="index.html" class="style34">Dual Access Control for Cloud-Based Data Storage and Sharing</a><a href="index.html"></a><a href="index.html"></a><a href="index.html"></a></h1>
+      </div>
+      <div class="clr"></div>
+      <div class="menu_nav">
+        <ul>
+          <li class="active"><a href="DU_Main.jsp">User</a></li>
+          <li><a href="DU_Login.jsp">Logout</a></li>
+        </ul>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content_resize">
+      <div class="mainbar">
+        <div class="article">
+          <h2><span> Download   </span> File</h2>
+          <p><span class="style1">Role : (<%=application.getAttribute("urole")%>)</span> </p>
+          <p>&nbsp;</p>
+          <form action="DU_Download2.jsp" method="post" id="form1">
+            <p><span class="style7">
+              <%
+			  String role="";
+	try 
+		{  
+		
+
+		
+		String file = request.getParameter("t1");
+		String user=(String)application.getAttribute("uname");
+		String yes="Permitted";
+		String trapdoor="",contentkey="",secretkey="";
+		String status="";
+		
+		String strQuery = "select * from cloudserver where fname='"+file+"'";
+		ResultSet rs = connection.createStatement().executeQuery(strQuery);
+		if(rs.next()==true)
+		{
+			trapdoor=rs.getString(11);
+		String urole=(String)application.getAttribute("urole");
+			if(urole.equalsIgnoreCase("Doctor"))
+			{
+				role="doctor_per";
+			}
+			else if(urole.equalsIgnoreCase("Nurse"))
+			{
+				role="nurse_per";
+			}
+			else if(urole.equalsIgnoreCase("Cardiologist"))
+			{
+				role="cardiologist_per";
+			}
+			else
+			{}
+		String Qu = "select * from download_perm where fname='"+file+"' and "+role+"='Permitted'";
+		ResultSet rs11 = connection.createStatement().executeQuery(Qu);
+		if(rs11.next()==true)
+		{
+		
+			String Query = "select * from request where fname='"+file+"' and user='"+user+"'";
+			ResultSet rs1 = connection.createStatement().executeQuery(Query);
+			if(rs1.next()==true)
+			{
+				secretkey=rs1.getString(5);
+				contentkey=rs1.getString(6);
+				
+				
+				if(contentkey.equalsIgnoreCase("Requested"))
+				{
+					%>
+					Content Key Not Permitted !</span></p>
+					<p><a href="DU_Main.jsp">Back</a></p>
+					<p><span class="style7">
+					<%
+				}
+				else if(contentkey.equalsIgnoreCase("No"))
+				{
+					%>
+					Content Key Not Requested !</span></p>
+					<p><a href="DU_Main.jsp">Back</a></p>
+					<p><span class="style7">
+					<%
+				}
+				else
+				{
+					if(secretkey.equalsIgnoreCase("Requested"))
+					{
+						%>
+						Secret Key Not Permitted ! </span></p>
+						<p><a href="DU_Main.jsp">Back</a></p>
+						<p><span class="style7">
+						<%
+					}
+					else if(secretkey.equalsIgnoreCase("No"))
+					{
+						%>
+						Secret Key Not Requested !</span></p>
+						<p><a href="DU_Main.jsp">Back</a>
+						<%
+					}
+					else 
+					{  
+						String ck=rs.getString(4);
+						String msk=rs.getString(5);
+						%>
+						</p>
+						<table width="509" style="border-collapse:collapse" cellpadding="0" cellspacing="0" height="241" border="0" align="center">
+						<tr>
+						<td width="212" height="40" bgcolor="#FFFF00"><span class="style36"> File Name :-</span></td>
+						<td width="342"><span class="style18">
+						<label>
+						<input required="required" name="t14" type="text" value="<%=file%>" size="40" />
+						</label>
+						</span> </td>
+						</tr>
+						<tr>
+						<td height="40" bgcolor="#FFFF00"><span class="style36">Trapdoor :-</span></td>
+						<td><input name="t122" type="text" value="<%=trapdoor%>" size="40" /></td>
+						</tr>
+						<tr>
+						<td height="40" bgcolor="#FFFF00"><span class="style36">Content Key :-</span></td>
+						<td><input name="t134" type="text" value="<%=ck%>" size="40" /></td>
+						</tr>
+						<tr>
+						<td height="40" bgcolor="#FFFF00"><span class="style5">Secret Key :-</span></td>
+						<td><input name="t1343" type="text" value="<%=msk%>" size="40" /></td>
+						</tr>
+						<tr>
+						<td height="40"><div align="right"><span class="style18"></span></div></td>
+						<td><span class="style18">
+						<label>
+						<input type="submit" name="Submit22" value="Download" />
+						</label>
+						</span> </td>
+						</tr>
+						</table>
+						<p align="right"><a href="DU_Search.jsp">Back</a></p>
+						<p class="style7">
+						<%
+					}
+				}
+			}
+			else
+			{
+				%>
+				Keys Not Requested !</p>
+				<p><a href="DU_Main.jsp">Back</a></p>
+				<p class="style7">
+				<%
+			}
+		}		
+		else
+		{
+			%>
+			Download Not Permitted For Role : <%=urole%> ! </p>
+			<p><a href="DU_Main.jsp">Back</a>
+			<%
+		}	
+			
+		}		
+		else
+		{
+			%>
+			File   Doesn't   Exist ! </p>
+			<p><a href="DU_Main.jsp">Back</a>
+			<%
+		}
+	connection.close();
+	}
+	catch(Exception e)
+	{
+		out.println(e.getMessage());
+	}
+%></p>
+          </form>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="gadget">
+          <h2 class="star">Menu</h2>
+          <ul class="sb_menu">
+            <li><a href="DU_Main.jsp">Home</a></li>
+            <li><a href="DU_Login.jsp">Logout</a></li>
+          </ul>
+        </div>
+        <div class="gadget"></div>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer_resize">
+      <p class="lf">&nbsp;</p>
+      <div class="clr"></div>
+    </div>
+    <div class="clr"></div>
+  </div>
+</div>
+<div align=center></div>
+</body>
+</html>

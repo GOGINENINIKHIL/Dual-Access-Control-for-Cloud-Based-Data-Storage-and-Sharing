@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Data Owner </title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/cufon-yui.js"></script>
+<script type="text/javascript" src="js/arial.js"></script>
+<script type="text/javascript" src="js/cuf_run.js"></script>
+<style type="text/css">
+<!--
+.style1 {color: #00a0cb}
+.style32 {color: #FF0000; font-size: 24px;}
+-->
+</style>
+</head>
+<body>
+<div class="main">
+  <div class="header">
+    <div class="header_resize">
+      <div class="logo">
+        <h1><a href="index.html" class="style32">Dual Access Control for Cloud-Based Data Storage and Sharing</a><a href="index.html"></a><a href="index.html"></a></h1>
+      </div>
+      <div class="clr"></div>
+      <div class="menu_nav">
+        <ul>
+          <li class="active"><a href="DO_autho.jsp">Data Owner </a></li>
+          <li><a href="DO_Login.jsp">Logout</a></li>
+        </ul>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content_resize">
+      <div class="mainbar">
+        <div class="article">
+          <h2><span>Welcome <%=application.getAttribute("doname")%> </span></h2>
+          <p>&nbsp;</p>
+          <h3>You Are<span class="style1"> Not Authorized</span> !</h3>
+          <h3>Please Wait For Cloud To Authorize You ! </h3>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="gadget">
+          <h2 class="star">Menu</h2>
+          <ul class="sb_menu">
+            <li><a href="DO_autho.jsp">Home</a></li>
+            <li><a href="DO_Login.jsp">Logout</a></li>
+          </ul>
+        </div>
+        <div class="gadget"></div>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer_resize">
+      <p class="lf">&nbsp;</p>
+      <div class="clr"></div>
+    </div>
+    <div class="clr"></div>
+  </div>
+</div>
+<div align=center></div>
+</body>
+</html>

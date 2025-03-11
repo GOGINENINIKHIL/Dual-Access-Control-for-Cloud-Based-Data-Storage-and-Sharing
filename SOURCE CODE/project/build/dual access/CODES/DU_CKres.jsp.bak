@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Data User </title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/cufon-yui.js"></script>
+<script type="text/javascript" src="js/arial.js"></script>
+<script type="text/javascript" src="js/cuf_run.js"></script>
+<style type="text/css">
+<!--
+.style19 {font-size: 14px}
+.style1 {	color: #666666;
+	font-weight: bold;
+}
+.style34 {color: #FF0000; font-size: 24px;}
+.style35 {
+	color: #FF0000;
+	font-weight: bold;
+}
+-->
+</style>
+</head>
+<body>
+<div class="main">
+  <div class="header">
+    <div class="header_resize">
+      <div class="logo">
+        <h1><a href="index.html" class="style34">Attribute-Based Storage Supporting Secure Deduplication of Encrypted Data in Cloud</a><a href="index.html"></a><a href="index.html"></a><a href="index.html"></a></h1>
+      </div>
+      <div class="clr"></div>
+      <div class="menu_nav">
+        <ul>
+          <li class="active"><a href="DU_Main.jsp">User</a></li>
+          <li><a href="DU_Login.jsp">Logout</a></li>
+        </ul>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content_resize">
+      <div class="mainbar">
+        <div class="article">
+          <h2><span>Content Key Response</span></h2>
+          <p><span class="style1">Role : (<%=application.getAttribute("urole")%>)</span></p>
+          <p>&nbsp;</p>
+          <form id="form" name="form1" method="post" action="DU_CKres1.jsp">
+            <div align="center" class="style19">
+              <p><br />
+                <span class="style35">Enter File Name</span> :
+                <input required="required" name="t14" type="text" size="30" />
+        <br />
+        <br />
+        <input type="submit" name="Submit" value="Find Content Key" />
+              </p>
+              <p>&nbsp; </p>
+            </div>
+          </form>
+          <%String key=(String)application.getAttribute("key");
+			  if(key!=(null))
+			  {%>
+          <p align="center" class="style19"><strong>Content Key : <%=key%>&nbsp;</strong></p>
+          <%application.removeAttribute("key");
+			  }%>
+          <p align="right"><a href="DU_Main.jsp">Back</a></p>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="gadget">
+          <h2 class="star">Menu</h2>
+          <ul class="sb_menu">
+            <li><a href="DU_Main.jsp">Home</a></li>
+            <li><a href="DU_Login.jsp">Logout</a></li>
+          </ul>
+        </div>
+        <div class="gadget"></div>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer_resize">
+      <p class="lf">&nbsp;</p>
+      <div class="clr"></div>
+    </div>
+    <div class="clr"></div>
+  </div>
+</div>
+<div align=center></div>
+</body>
+</html>

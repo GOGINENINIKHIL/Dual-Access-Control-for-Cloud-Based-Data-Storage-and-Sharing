@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@page import ="java.util.*,java.io.File,java.security.Key,java.util.Random,javax.crypto.Cipher,javax.crypto.spec.SecretKeySpec,org.bouncycastle.util.encoders.Base64"%>
+    <%@ page import="java.sql.*,java.util.Random,java.io.PrintStream,java.io.FileOutputStream,java.io.FileInputStream,java.security.DigestInputStream,java.math.BigInteger,java.security.MessageDigest,java.io.BufferedInputStream" %>
+<%@ include file="connect.jsp" %>
+<%@page import= "java.io.File"%>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Data Owner </title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/cufon-yui.js"></script>
+<script type="text/javascript" src="js/arial.js"></script>
+<script type="text/javascript" src="js/cuf_run.js"></script>
+<style type="text/css">
+<!--
+.style14 {color: #0e4369; font-size: 16px; font-weight: bold; }
+.style16 {font-size: 12px}
+.style28 {color: #5f5f5f}
+.style13 {font-size: 12px;
+	color: #504b4b;
+}
+.style32 {color: #FF0000; font-size: 24px;}
+-->
+</style>
+</head>
+<body>
+<div class="main">
+  <div class="header">
+    <div class="header_resize">
+      <div class="logo">
+        <h1><a href="index.html" class="style32">Dual Access Control for Cloud-Based Data Storage and Sharing</a><a href="index.html"></a><a href="index.html"></a></h1>
+      </div>
+      <div class="clr"></div>
+      <div class="menu_nav">
+        <ul>
+          <li class="active"><a href="DO_Main.jsp">Data Owner </a></li>
+          <li><a href="DO_Login.jsp">Logout</a></li>
+        </ul>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content_resize">
+      <div class="mainbar">
+        <div class="article">
+          <h2><span> Add  </span> File</h2>
+          <p>&nbsp;</p>
+          <form action="DO_Add2.jsp" method="post">
+            <p>
+              <%
+      	try {
+			String filename=request.getParameter("t42");
+      		String file=request.getParameter("tt");
+      		String cont=request.getParameter("text");
+			
+			application.setAttribute("file1",file);
+
+
+				String keys = "ef50a0ef2c3e3a5f";
+      			byte[] keyValue = keys.getBytes();
+      			Key key = new SecretKeySpec(keyValue, "AES");
+      			Cipher c = Cipher.getInstance("AES");
+      			c.init(Cipher.ENCRYPT_MODE, key);
+      			String encryptedValue = new String(Base64.encode(cont.getBytes()));
+
+			String namefile=request.getRealPath("file");
+      		PrintStream p = new PrintStream(new FileOutputStream(namefile+"/"));
+			p.print(new String(cont));
+      		String h1="";
+			MessageDigest md = MessageDigest.getInstance("SHA1");
+			FileInputStream fis11 = new FileInputStream(namefile+"/");
+			DigestInputStream dis1 = new DigestInputStream(fis11, md);
+			BufferedInputStream bis1 = new BufferedInputStream(dis1);
+			//Read the bis so SHA1 is auto calculated at dis
+			while (true) {
+				int b1 = bis1.read();
+				if (b1 == -1)
+					break;
+			}
+			BigInteger bi1 = new BigInteger(md.digest());
+			String spl1 = bi1.toString();
+			h1 = bi1.toString(16);
+%>
+            </p>
+            <table width="545" border="0" align="center" style="border-collapse:collapse" cellpadding="0" cellspacing="0">
+              <tr>
+                <td height="36"><span class="odd style13"><strong>File Name : </strong> </span></td>
+                <td><input name="t422" type="text" id="t422" size="49" value="<%= file %>" readonly="readonly" /></td>
+              </tr>
+              <tr>
+                <td width="210" height="36"><span class="odd style13"><strong>Trapdoor : </strong> </span></td>
+                <td width="319"><input name="t42" type="text" id="t42" size="49" value="<%= h1 %>" readonly="readonly" /></td>
+              </tr>
+              <tr>
+                <td height="257">&nbsp;</td>
+                <td><textarea name="text2" id="textarea" cols="50"  rows="15" readonly="readonly"><%= encryptedValue %></textarea></td>
+              </tr>
+              <%--<tr>
+                <td height="35"><span class="odd style13"><strong>Trapdoor : </strong></span></td>
+                <td><input name="t4" type="text" id="t4" size="49" value="" readonly="readonly" /></td>
+              </tr>--%>
+              <tr>
+                <td><div align="right"> </div></td>
+                <td><input type="submit" name="Submit2" value="Add File" /></td>
+              </tr>
+            </table>
+            <p>
+              <%
+
+	   
+
+           connection.close();
+          }
+         
+          catch(Exception e)
+          {
+            out.println(e.getMessage());
+          }
+%>
+            </p>
+          </form>
+          <p align="right"><a href="DO_Main.jsp">Back</a></p>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="gadget">
+          <h2 class="star">Menu</h2>
+          <ul class="sb_menu">
+            <li><a href="DO_Main.jsp">Home</a></li>
+            <li><a href="DO_Login.jsp">Logout</a></li>
+          </ul>
+        </div>
+        <div class="gadget"></div>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer_resize">
+      <p class="lf">&nbsp;</p>
+      <div class="clr"></div>
+    </div>
+    <div class="clr"></div>
+  </div>
+</div>
+<div align=center></div>
+</body>
+</html>

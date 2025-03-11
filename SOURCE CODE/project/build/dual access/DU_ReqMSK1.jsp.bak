@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@page import ="java.util.*"%>
+<%@page import ="java.sql.*"%>
+<%@page import ="java.util.*,java.security.Key,java.util.Random,javax.crypto.Cipher,javax.crypto.spec.SecretKeySpec,org.bouncycastle.util.encoders.Base64"%>
+<%@ page import="java.sql.*,java.util.Random,java.io.PrintStream,java.io.FileOutputStream,java.io.FileInputStream,java.security.DigestInputStream,java.math.BigInteger,java.security.MessageDigest,java.io.BufferedInputStream" %>
+<%@ page import ="java.security.Key,java.security.KeyPair,java.security.KeyPairGenerator,javax.crypto.Cipher"%>
+<%@page import ="java.util.*,java.text.SimpleDateFormat,java.util.Date,java.io.FileInputStream,java.io.FileOutputStream,java.io.PrintStream"%>
+<%@ include file="connect.jsp" %>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Data User </title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/cufon-yui.js"></script>
+<script type="text/javascript" src="js/arial.js"></script>
+<script type="text/javascript" src="js/cuf_run.js"></script>
+<style type="text/css">
+<!--
+.style21 {font-size: 14px}
+.style22 {color: #666666; font-weight: bold;}
+.style17 {font-size: 14; }
+.style28 {font-size: 16px;
+	font-weight: bold;
+}
+.style3 {font-size: 12px}
+.style30 {font-size: 18px; font-weight: bold; }
+.style34 {color: #FF0000; font-size: 24px;}
+-->
+</style>
+</head>
+<body>
+<div class="main">
+  <div class="header">
+    <div class="header_resize">
+      <div class="logo">
+        <h1><a href="index.html" class="style34">Attribute-Based Storage Supporting Secure Deduplication of Encrypted Data in Cloud</a><a href="index.html"></a><a href="index.html"></a><a href="index.html"></a><a href="index.html"></a></h1>
+      </div>
+      <div class="clr"></div>
+      <div class="menu_nav">
+        <ul>
+          <li class="active"><a href="DU_Main.jsp">User</a></li>
+          <li><a href="DU_Login.jsp">Logout</a></li>
+        </ul>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content_resize">
+      <div class="mainbar">
+        <div class="article">
+          <h2><span> (MSK) Request status</span></h2>
+          <p><span class="style22">Role : (<%=application.getAttribute("urole")%>)</span> </p>
+          <p>&nbsp;</p>
+          <p>
+            <%
+try
+{
+	
+	String owner = request.getParameter("t142");
+	String fname = request.getParameter("t14");
+	String uname=(String)application.getAttribute("uname");
+	String generate ="Requested",msk="";
+	
+	SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm:ss");
+		Date now = new Date();
+		
+		String strDate = sdfDate.format(now);
+		String strTime = sdfTime.format(now);
+		String dt = strDate + "   " + strTime;
+	
+	
+		String query1="select * from cloudserver  where fname='"+fname+"' and downer='"+owner+"' "; 
+		Statement st1=connection.createStatement();
+		ResultSet rs1=st1.executeQuery(query1);
+		if ( rs1.next())
+		{
+			String query="select * from request  where user='"+uname+"' and fname='"+fname+"' and owner='"+owner+"' "; 
+			Statement st=connection.createStatement();
+			ResultSet rs=st.executeQuery(query);
+			if ( rs.next()==true)
+			{
+			
+				msk=rs.getString(5);
+				if(msk.equalsIgnoreCase("Requested"))
+				{
+					%>
+          </p>
+          <p class="style30">Request Already Sent To Cloud !</p>
+          <p class="style28"><a href="DU_Main.jsp" class="style3">Back</a></p>
+          <%
+				}
+				else if(msk.equalsIgnoreCase("No"))
+				{
+					String query3="update request set secretkey='Requested' where user='"+uname+"' and owner='"+owner+"' and fname='"+fname+"'";
+					connection.createStatement().executeUpdate(query3);
+					
+					%>
+          <p class="style30">Request Sent To Cloud !</p>
+          <p><a href="DU_Main.jsp" class="style3">Back</a></p>
+          <%
+				}
+				else
+				{
+					%>
+          <p class="style30">Request Already Sent To Cloud !</p>
+          <p class="style28"><a href="DU_Main.jsp" class="style3">Back</a></p>
+          <%
+				}		
+			}
+			else
+			{
+			
+			
+			
+String query4="insert into request(user,owner,fname,secretkey,contentkey) values('"+uname+"','"+owner+"','"+fname+"','Requested','No')";
+				connection.createStatement().executeUpdate(query4); 
+				%>
+          <p class="style30">Request Sent To Cloud !</p>
+          <p class="style28"><a href="DU_Main.jsp" class="style3">Back</a></p>
+          <p class="style28">
+            <%
+					
+			}
+		}
+		else
+		{
+			%>
+          </p>
+          <p class="style30">File Doesn't Exist ! </p>
+          <p><a href="DU_Main.jsp" class="style3">Back</a></p>
+          <p>
+            <%
+		}
+		
+	connection.close();
+} 
+catch(Exception e)
+{
+out.println(e.getMessage());
+}
+	%>
+          </p>
+          <p align="justify">&nbsp;</p>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="gadget">
+          <h2 class="star">Menu</h2>
+          <ul class="sb_menu">
+            <li><a href="DU_Main.jsp">Home</a></li>
+            <li><a href="DU_Login.jsp">Logout</a></li>
+          </ul>
+        </div>
+        <div class="gadget"></div>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer_resize">
+      <p class="lf">&nbsp;</p>
+      <div class="clr"></div>
+    </div>
+    <div class="clr"></div>
+  </div>
+</div>
+<div align=center></div>
+</body>
+</html>
